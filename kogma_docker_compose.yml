@@ -1,0 +1,27 @@
+version: '3.3'
+services:
+  komga:
+    image: gotson/komga
+    container_name: komga
+    hostname: kogma
+    networks:
+      - apps_network
+      - network_related_network
+    volumes:
+      - komga_config:/config
+      - znas_comics_library:/data/comics
+    ports:
+      - 25600:25600
+    restart: unless-stopped
+
+volumes:
+  komga_config:
+    external: true
+  znas_comics_library:
+    external: true
+
+networks:
+  apps_network:
+    external: true
+  network_related_network:
+    external: true
