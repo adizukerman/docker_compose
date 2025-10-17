@@ -24,7 +24,7 @@ volumes:
   znas_downloads_comics:
     external: true
   znas_adi_books:
-    externa: true
+    external: true
 
 networks:
   apps_network:
