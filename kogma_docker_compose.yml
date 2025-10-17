@@ -10,6 +10,8 @@ services:
     volumes:
       - komga_config:/config
       - znas_comics_library:/data/comics
+      - znas_adi_books: /data/adi_books
+      - znas_downloads_comics:/downloads-comics
     ports:
       - 25600:25600
     restart: unless-stopped
@@ -19,6 +21,10 @@ volumes:
     external: true
   znas_comics_library:
     external: true
+  znas_downloads_comics:
+    external: true
+  znas_adi_books:
+    externa: true
 
 networks:
   apps_network:
