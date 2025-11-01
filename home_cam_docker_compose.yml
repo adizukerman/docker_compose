@@ -1,0 +1,73 @@
+services:
+#    nanit:
+#        container_name: nanit
+        # network_mode: bridge_cam
+#        networks:
+#          - cam_network
+        # Image to pull, adjust the :suffix for your version tag
+        #image: registry.gitlab.com/adam.stanek/nanit:v0-7
+        #image: registry.gitlab.com/adam.stanek/nanit:latest
+#        image: indiefan/nanit:latest
+        # Makes the container auto-start whenever you restart your computer
+#        restart: unless-stopped
+        # Expose the RTMP port
+#        ports:
+#            - 1936:1936
+        # Configuration (see .env.sample file for all the options)
+        # Notice: Mind the quotes, whole pairs are quoted instead of just values. If your password contains $ character, replace it with double $$ to avoid interpolation.
+#        environment:
+#            - "NANIT_EMAIL=adizukerman@gmail.com"
+#            - "NANIT_PASSWORD=9}]@n;it$4Q("
+#            - "NANIT_RTMP_ADDR=192.168.78.30:1936"
+#            - "NANIT_MQTT_ENABLED=false"
+#            - "NANIT_MQTT_BROKER_URL=192.168.1.50:1883" # can't access in bridge mode
+#            - "NANIT_MQTT_USERNAME=raspberry_pi_zero_w"
+#            - "NANIT_MQTT_PASSWORD=s3ndB!te$"
+#            - "NANIT_REFRESH_TOKEN=81ebe149ead6799c371a606b8a5b936369056d688a69598e"
+#        volumes:
+#            - nanit_data:/data
+
+    wyze-bridge:
+        container_name: wyze-bridge
+        restart: unless-stopped
+        #image: mrlt8/wyze-bridge:latest
+        image: idisposablegithub365/wyze-bridge:latest
+        #network_mode: bridge_cam
+        network_mode: host # Temporary change trying due to https://github.com/mrlt8/docker-wyze-bridge/issues/1432
+        #networks:
+        #  - cam_network
+        ports:
+            - 1935:1935 # RTMP
+            - 8554:8554 # RTSP
+            - 8888:8888 # HLS
+            - 8889:8889 #WebRTC
+            - 8189:8189/udp # WebRTC/ICE
+            #- 5000:5000 # WEB-UI
+            #- 9336:5000 # WEB-UI
+            - 9336:9336 # WEB-UI
+        environment:
+            # [OPTIONAL] Credentials can be set in the WebUI
+            # API Key and ID can be obtained from the wyze dev portal: 
+            # https://developer-api-console.wyze.com/#/apikey/view
+            - WYZE_EMAIL=adizukerman@gmail.com
+            - WYZE_PASSWORD=4myWyzeCamera
+            - API_ID=fe660d75-2136-47be-aa6a-40dc6f58f5dc
+            - API_KEY=yuMCH5HTK8y1u92HqRqyFwLzXbt9igdKN5bvW37TYLTDEDNZ92FGR9kembuI
+            # [OPTIONAL] IP Address of the host to enable WebRTC e.g.,:
+            - WB_IP=192.168.78.30
+            # WebUI and Stream authentication:
+            - WB_AUTH=False # Set to false to disable web and stream auth.
+            # WB_USERNAME=
+            # WB_PASSWORD=
+        volumes:
+            - wyze-bridge_data:/tokens/
+
+volumes:
+    nanit_data:
+        external: true
+    wyze-bridge_data:
+        external: true
+
+networks:
+    cam_network:
+      external: True 
